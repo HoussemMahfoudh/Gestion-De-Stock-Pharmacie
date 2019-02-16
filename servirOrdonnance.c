@@ -51,23 +51,24 @@ int medicPerimeControl2(Lot *lot){
 /* Fonction qui prend en paramètre le numero du médicament a chercher et qui :
 	- Retourne -1 si aucun medicament trouvé
 	- Retourne la quantité en stock du médicament trouvé  */
-int rechercherMedicamentOrd(Medicament *medTab, int n, int medicNum){
+int rechercherMedicamentOrd(Medicament *medTab, int n, int medicNum, int *indice){
 	int numEl = n, i = 0;
 	
 	
-	if(medicNum>numEl || medicNum <1){
+	if(medicNum>medTab[numEl-1].num || medicNum <medTab[0].num){
 		return -1;
 	}else{
-		while(medTab[i].num != medicNum){
+		while((medTab[i].num != medicNum) && (i < n)){
 			i++;
 		}
-		if (medicPerimeControl2(&medTab[i].lot) == 1 ){
+		if (i > (numEl-1)){
+			return -1;
+		}else if(medicPerimeControl2(&medTab[i].lot) == 1 ){
 			return -2;
 		}else{
+			*indice = i;
 			return medTab[i].quantiteStock;
-		}
-		
-		
+		}	
 	}
 }
 
@@ -83,11 +84,12 @@ void servirOrdonnance (Medicament *MedTab, int n){
 	int tabNumMedicament[100];
 	int tabQuantiteMedicament[100];
 	float total;
+	int indice;
 	
 	do{
 		printf("\nDonner le(s) numero(s) du medicament a acheter ou -1 pour terminer l ordonnace : ");
 		scanf("%d",&ord);
-		resultatRecherche = rechercherMedicamentOrd(&*MedTab,n,ord); /* Appel de la fonction rechercherMedicamentOrd et stockage du variable retourné dans resultatRecherche */
+		resultatRecherche = rechercherMedicamentOrd(&*MedTab,n,ord,&indice); /* Appel de la fonction rechercherMedicamentOrd et stockage du variable retourné dans resultatRecherche */
 		if(ord != -1){
 			if(resultatRecherche != -1){
 				if(resultatRecherche == -2){ /* Test si la date du medicament choisit est périmée */ 
@@ -95,7 +97,7 @@ void servirOrdonnance (Medicament *MedTab, int n){
 				}else if(resultatRecherche == 0){
 					printf("\nMedicament Hors Stock !");
 				}else{
-					tabNumMedicament[compteur]=ord-1; /* Sauvegarde du numero de la case du medicament dans tabNumMedicament  */
+					tabNumMedicament[compteur]=indice; /* Sauvegarde du numero de la case du medicament dans tabNumMedicament  */
 					do{
 						printf("Donner la quantite du medicament a acheter : ");
 						fflush(stdin);

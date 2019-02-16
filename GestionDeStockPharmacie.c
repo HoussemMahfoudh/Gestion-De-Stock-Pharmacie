@@ -1,7 +1,7 @@
 /***************************************************************************************
 * Projet:  MINI-PROJET – GESTION DE STOCK D’UNE PHARMACIE
 * Fonction: Application qui permet au pharmacien d'ajouter supprimer rechercher
-*			et afficher tout les informations concernant ces médicaments
+*			et afficher tout les informations concernant ses médicaments
 * Objet :  
 ****************************************************************************************
 * Auteur:   Mahfoudh Houssem & Cherif Malek
